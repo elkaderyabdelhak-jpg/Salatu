@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdelhak - القصابي 🕌</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Tahoma}
+body{background:#f5f1e8;padding-bottom:95px}
+header{background:#111;color:#fff;text-align:center;padding:16px;font-size:22px;font-weight:bold;border-radius:0 0 20px 20px}
+/* === الكبسولة بحال التصويرة === */
+#countdownPill{position:sticky;top:10px;z-index:1000;background:#fff;margin:10px 14px 0 14px;border-radius:22px;box-shadow:0 4px 16px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:space-between;padding:12px 16px;direction:rtl}
+#countdownPill .icon{width:38px;height:38px;background:#e8e0f0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+#countdownPill .texts{flex:1;margin:0 10px;text-align:right}
+#countdownPill .line1{font-size:16px;font-weight:bold;color:#111}
+#countdownPill .line2{font-size:15px;color:#111;margin-top:2px}
+#countdownPill .line2 b{font-size:16px}
+#countdownPill .arrow{font-size:18px;color:#111}
+.date-card{background:#fff;margin:14px;border-radius:16px;padding:14px;text-align:center}
+.hijri{color:#0a7a5c;font-weight:bold;font-size:19px}
+.controls{background:#111;color:#fff;margin:12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;padding:12px 14px}
+.controls button{border:0;border-radius:20px;padding:9px 18px;font-weight:bold}
+.btn-test{background:#333;color:#fff}
+.btn-on{background:#e53935;color:#fff}
+.prayer-list{margin:12px;display:flex;flex-direction:column;gap:10px}
+.prayer-item{background:#fff;border-radius:12px;padding:15px 16px;display:flex;justify-content:space-between;font-size:17px}
+.tab-content{display:none}.tab-content.active{display:block}
+.compass-wrap{width:260px;height:260px;margin:20px auto;background:#fff;border-radius:50%;border:8px solid #111;position:relative;overflow:hidden}
+#compassRose{width:100%;height:100%;border-radius:50%;position:relative}
+.compass-arrow{position:absolute;left:50%;top:8%;font-size:48px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;border-top:1px solid #ddd;padding:10px 0;border-radius:16px 16px 0 0}
+nav button{background:none;border:0;font-size:13px;color:#888}
+nav button.active{color:#0a7a5c;font-weight:bold}
+nav button span{font-size:24px;display:block}
+#adhanOverlay{display:none;position:fixed;inset:0;background:#0a7a5c;z-index:9999;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:20px}
+.dua-box{margin-top:20px;background:#fff;color:#0a7a5c;padding:14px;border-radius:16px;width:92%}
+.dhikr-btn.active{background:#0a7a5c!important;color:#fff!important}
+</style>
+</head>
+<body>
+<header>Abdelhak - القصابي 🕌</header>
+
+<!-- === الكبسولة بحال التصويرة === -->
+<div id="countdownPill">
+  <div class="icon">🕌</div>
+  <div class="texts">
+    <div class="line1">23 جمادى الأولى 1448 &nbsp;|&nbsp; القصابي</div>
+    <div class="line2" id="countdownText">+ 1:23:27 &nbsp; العشاء, 06:43 م</div>
+  </div>
+  <div class="arrow">∨</div>
+</div>
+
+<div id="salatTab" class="tab-content active">
+<div class="date-card"><div>الأربعاء</div><div class="hijri">23 جمادى الأولى 1448</div><div>4 نوفمبر 2026 - القصابي</div></div>
+<div class="controls"><div>الأذان: <b id="adhanStatus">مطفي</b></div><div><button class="btn-test" onclick="testAdhan()">جرب</button> <button class="btn-on" id="adhanToggle" onclick="toggleAdhan()">تشغيل</button></div></div>
+<div class="prayer-list">
+<div class="prayer-item"><div>🌙 الفجر</div><div>05:09</div></div>
+<div class="prayer-item"><div>🌅 الشروق</div><div>06:30</div></div>
+<div class="prayer-item"><div>☀️ الظهر</div><div>12:05</div></div>
+<div class="prayer-item"><div>🌤️ العصر</div><div>03:00</div></div>
+<div class="prayer-item"><div>🌇 المغرب</div><div>05:31</div></div>
+<div class="prayer-item"><div>🌙 العشاء</div><div>06:41</div></div>
+</div>
+<audio id="adhanAudio" preload="auto"></audio>
+</div>
+
+<div id="qiblaTab" class="tab-content"><div style="text-align:center;padding:16px">
+<h3>اتجاه القبلة من القصابي</h3><p>مكة المكرمة • 95°</p>
+<div class="compass-wrap"><div id="compassRose"><div style="position:absolute;top:8px;left:50%;color:red;font-weight:bold">ش</div><div class="compass-arrow" id="qiblaArrow">🕋</div></div></div>
+<div style="font-size:42px;font-weight:bold;color:#0a7a5c" id="qiblaDeg">95°</div><div id="qiblaText">حرك الهاتف على شكل 8</div>
+<br><button onclick="flipQibla()" style="background:#fff;color:#0a7a5c;border:2px solid #0a7a5c;padding:10px 18px;border-radius:20px">عكس الاتجاه ↻</button>
+<button onclick="requestCompass()" style="background:#0a7a5c;color:#fff;border:0;padding:10px 18px;border-radius:20px">تفعيل البوصلة 🧭</button>
+</div></div>
+
+<div id="tasbihTab" class="tab-content">
+  <div style="text-align:center;padding:16px">
+    <h2>📿 المسبحة</h2>
+    <p style="color:#888;margin-top:6px">ختار الذكر وسبح حتى 33</p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0">
+      <button onclick="setDhikr('سبحان الله',this)" class="dhikr-btn active" style="background:#0a7a5c;color:#fff;border:0;padding:10px 16px;border-radius:20px;font-weight:bold">سبحان الله</button>
+      <button onclick="setDhikr('الحمد لله',this)" class="dhikr-btn" style="background:#fff;color:#333;border:1px solid #ddd;padding:10px 16px;border-radius:20px;font-weight:bold">الحمد لله</button>
+      <button onclick="setDhikr('الله أكبر',this)" class="dhikr-btn" style="background:#fff;color:#333;border:1px solid #ddd;padding:10px 16px;border-radius:20px;font-weight:bold">الله أكبر</button>
+      <button onclick="setDhikr('لا إله إلا الله',this)" class="dhikr-btn" style="background:#fff;color:#333;border:1px solid #ddd;padding:10px 16px;border-radius:20px;font-weight:bold">لا إله إلا الله</button>
+      <button onclick="setDhikr('أستغفر الله',this)" class="dhikr-btn" style="background:#fff;color:#333;border:1px solid #ddd;padding:10px 16px;border-radius:20px;font-weight:bold">أستغفر الله</button>
+    </div>
+    <div id="currentDhikr" style="font-size:28px;font-weight:bold;color:#0a7a5c;margin:10px 0">سبحان الله</div>
+    <div style="color:#888">الهدف: 33 • المجموع: <b id="totalCount">0</b></div>
+    <div style="font-size:70px;font-weight:bold;margin:6px 0" id="tasbihCount">0</div>
+    <div style="color:#888">من 33</div>
+    <div style="background:#eee;height:10px;border-radius:10px;margin:14px 20px;overflow:hidden"><div id="tasbihBar" style="background:#0a7a5c;height:100%;width:0%"></div></div>
+    <button onclick="doTasbih()" style="background:#0a7a5c;color:#fff;border:0;padding:22px 60px;border-radius:50px;font-size:22px;font-weight:bold;box-shadow:0 6px 16px rgba(10,122,92,.3)">سبح 📿</button>
+    <br><br>
+    <button onclick="resetTasbih()" style="background:#333;color:#fff;border:0;padding:8px 18px;border-radius:12px">تصفير ↺</button>
+    <div id="tasbihMsg" style="margin-top:14px;font-weight:bold;color:#0a7a5c;min-height:24px"></div>
+    <audio id="tasbihAudio" preload="auto"></audio>
+  </div>
+</div>
+
+<div id="matchTab" class="tab-content"><div style="padding:16px">
+<h3 style="text-align:center">⚽ المباريات</h3>
+<div id="matchDate" style="text-align:center;color:#0a7a5c;font-weight:bold;margin:10px 0">جاري التحميل...</div>
+<div style="text-align:center;margin-bottom:12px">
+  <button onclick="loadMatches(-1)" style="background:#fff;border:1px solid #ddd;padding:8px 14px;border-radius:16px">أمس</button>
+  <button onclick="loadMatches(0)" style="background:#0a7a5c;color:#fff;border:0;padding:8px 14px;border-radius:16px">اليوم</button>
+  <button onclick="loadMatches(1)" style="background:#fff;border:1px solid #ddd;padding:8px 14px;border-radius:16px">غدا</button>
+</div>
+<div id="matchesList" style="display:flex;flex-direction:column;gap:10px"><div style="text-align:center;color:#888">جاري جلب المباريات الحقيقية...</div></div>
+<p style="text-align:center;color:#888;font-size:12px;margin-top:10px">المصدر: TheSportsDB - مباريات كرة القدم العالمية</p>
+</div></div>
+
+<nav>
+<button class="active" onclick="openTab('salatTab',this)"><span>🕌</span>صلاة</button>
+<button onclick="openTab('qiblaTab',this)"><span>🧭</span>القبلة</button>
+<button onclick="openTab('tasbihTab',this)"><span>📿</span>المسبحة</button>
+<button onclick="openTab('matchTab',this)"><span>⚽</span>المباريات</button>
+</nav>
+
+<div id="adhanOverlay">
+<div style="font-size:48px;font-weight:bold">اللهُ أكبَرُ<br>اللهُ أكبَر</div>
+<div style="margin-top:14px;font-size:20px">حان الآن موعد <b id="overlayPrayerName">الصلاة</b> 🕌</div>
+<div class="dua-box"><b>دعاء بعد الأذان:</b><br>اللهم رب هذه الدعوة التامة والصلاة القائمة آت محمدا الوسيلة والفضيلة وابعثه مقاما محمودا الذي وعدته</div>
+<button onclick="closeAdhan()" style="margin-top:18px;background:#fff;color:#0a7a5c;border:0;padding:12px 28px;border-radius:24px;font-weight:bold">إغلاق ✕</button>
+</div>
+
+<script>
+var adhanEnabled=false; var qiblaFlipped=true; var tasbih=0; var currentDhikrName='سبحان الله';
+
+// === الكبسولة بحال التصويرة ===
+function formatTime(h,m){
+  var suffix=h>=12?'م':'ص';
+  var hh=h%12; if(hh===0) hh=12;
+  var mm=('0'+m).slice(-2);
+  return ('0'+hh).slice(-2)+':'+mm+' '+suffix;
+}
+function updateCountdown(){
+  var now=new Date();
+  var prayers=[
+    {name:'الفجر',h:5,m:9},
+    {name:'الشروق',h:6,m:30},
+    {name:'الظهر',h:12,m:5},
+    {name:'العصر',h:15,m:0},
+    {name:'المغرب',h:17,m:31},
+    {name:'العشاء',h:18,m:41}
+  ];
+  var next=null;
+  for(var i=0;i<prayers.length;i++){
+    var d=new Date(now.getFullYear(),now.getMonth(),now.getDate(),prayers[i].h,prayers[i].m,0);
+    if(d>now){next={name:prayers[i].name,time:d,h:prayers[i].h,m:prayers[i].m};break;}
+  }
+  if(!next){
+    var d2=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,5,9,0);
+    next={name:'الفجر',time:d2,h:5,m:9};
+  }
+  var diff=Math.floor((next.time-now)/1000);
+  var hh=Math.floor(diff/3600);
+  var mm=Math.floor((diff%3600)/60);
+  var ss=diff%60;
+  var countdown='+ '+hh+':'+('0'+mm).slice(-2)+':'+('0'+ss).slice(-2);
+  var el=document.getElementById('countdownText');
+  if(el) el.innerHTML=countdown+' &nbsp; '+next.name+', '+formatTime(next.h,next.m);
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+function updateAdhanUI(){document.getElementById('adhanStatus').innerText=adhanEnabled?'مفعل':'مطفي';document.getElementById('adhanToggle').innerText=adhanEnabled?'إيقاف':'تشغيل';}
+function toggleAdhan(){adhanEnabled=!adhanEnabled;updateAdhanUI();if(adhanEnabled)testAdhan('الفجر - تجربة');}
+function testAdhan(name){if(!name)name='العصر';document.getElementById('overlayPrayerName').innerText=name;document.getElementById('adhanOverlay').style.display='flex';var a=document.getElementById('adhanAudio');a.src='https://cdn.islamic.network/adhan/audio/128/ar.alafasy.mp3';a.volume=1;a.load();a.play();}
+function closeAdhan(){document.getElementById('adhanOverlay').style.display='none';document.getElementById('adhanAudio').pause();}
+function openTab(id,btn){var all=document.querySelectorAll('.tab-content');for(var i=0;i<all.length;i++)all[i].classList.remove('active');document.getElementById(id).classList.add('active');var btns=document.querySelectorAll('nav button');for(var j=0;j<btns.length;j++)btns[j].classList.remove('active');btn.classList.add('active');if(id==='qiblaTab')requestCompass();if(id==='matchTab')loadMatches(0);}
+function flipQibla(){qiblaFlipped=!qiblaFlipped;alert('تم عكس الاتجاه');}
+function handleOrientation(e){var heading=e.webkitCompassHeading;if(heading==null)heading=360-e.alpha;if(heading==null)return;var qibla=94.78;if(qiblaFlipped)qibla=qibla+180;if(qibla>=360)qibla=qibla-360;var diff=qibla-heading;document.getElementById('compassRose').style.transform='rotate('+(-heading)+'deg)';document.getElementById('qiblaDeg').innerText=Math.round(qibla)+'°';if(Math.abs(diff)<12)document.getElementById('qiblaText').innerText='✅ أنت متجه للقبلة';else document.getElementById('qiblaText').innerText='حرك الهاتف حتى تتجه 🕋 للشرق';}
+function requestCompass(){window.addEventListener('deviceorientation',handleOrientation,true);}
+function setDhikr(name,btn){currentDhikrName=name;tasbih=0;document.getElementById('tasbihCount').innerText=0;document.getElementById('tasbihBar').style.width='0%';document.getElementById('currentDhikr').innerText=name;document.getElementById('tasbihMsg').innerText='';var btns=document.querySelectorAll('.dhikr-btn');for(var i=0;i<btns.length;i++){btns[i].style.background='#fff';btns[i].style.color='#333';}btn.style.background='#0a7a5c';btn.style.color='#fff';}
+function doTasbih(){tasbih++;var total=document.getElementById('totalCount');total.innerText=parseInt(total.innerText)+1;document.getElementById('tasbihCount').innerText=tasbih;document.getElementById('tasbihBar').style.width=(tasbih/33*100)+'%';if(navigator.vibrate)navigator.vibrate(20);if(tasbih===33){document.getElementById('tasbihMsg').innerText='✅ كملتي 33 - '+currentDhikrName+' - تقبل الله';var a=document.getElementById('tasbihAudio');a.src='https://cdn.islamic.network/adhan/audio/128/ar.alafasy.mp3';a.volume=1;a.play();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(function(){a.pause();if(currentDhikrName==='سبحان الله'){var b=document.querySelectorAll('.dhikr-btn')[1];setDhikr('الحمد لله',b);}else if(currentDhikrName==='الحمد لله'){var b2=document.querySelectorAll('.dhikr-btn')[2];setDhikr('الله أكبر',b2);}else if(currentDhikrName==='الله أكبر'){document.getElementById('tasbihMsg').innerText='🎉 ساليتي سبحان الله + الحمد لله + الله أكبر - 99 مرة';}},3000);}}
+function resetTasbih(){tasbih=0;document.getElementById('tasbihCount').innerText=0;document.getElementById('tasbihBar').style.width='0%';document.getElementById('tasbihMsg').innerText='';}
+function getDateStr(offset){var d=new Date();d.setDate(d.getDate()+offset);var y=d.getFullYear();var m=('0'+(d.getMonth()+1)).slice(-2);var day=('0'+d.getDate()).slice(-2);return y+'-'+m+'-'+day;}
+function renderMatches(events){var html='';for(var i=0;i<Math.min(events.length,20);i++){var e=events[i];var time=e.strTime?e.strTime.slice(0,5):'TBD';var status=e.strStatus||'';var score=(e.intHomeScore!=null&&e.intAwayScore!=null)?e.intHomeScore+' - '+e.intAwayScore:time;html+='<div style="background:#fff;padding:14px;border-radius:14px"><div style="color:#0a7a5c;font-size:12px">'+(e.strLeague||'')+' • '+status+'</div><div style="font-weight:bold;margin:6px 0">'+e.strHomeTeam+' × '+e.strAwayTeam+'</div><div style="color:#888">'+score+' • '+(e.strVenue||'')+'</div></div>';}return html;}
+function loadMatches(offset){if(offset==null)offset=0;var dateStr=getDateStr(offset);var cacheKey='matches_'+dateStr;var d=new Date();d.setDate(d.getDate()+offset);var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];var label=offset===0?'اليوم - ':offset===-1?'أمس - ':'غدا - ';document.getElementById('matchDate').innerText=label+days[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();var list=document.getElementById('matchesList');var saved=localStorage.getItem(cacheKey);if(saved){try{var oldEvents=JSON.parse(saved);if(oldEvents.length>0){list.innerHTML=renderMatches(oldEvents)+'<div style="text-align:center;color:#888;font-size:12px;margin-top:6px">📴 مباريات محفوظة - غادي يتجددو ملي يرجع الإنترنت</div>';}}catch(e){}}else{list.innerHTML='<div style="text-align:center;color:#888">جاري جلب المباريات...</div>';}fetch('https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d='+dateStr+'&s=Soccer').then(function(r){return r.json();}).then(function(data){var events=data.events||[];if(events.length===0){if(!saved)list.innerHTML='<div style="background:#fff;padding:16px;border-radius:14px;text-align:center">لا توجد مباريات كبيرة اليوم</div>';return;}localStorage.setItem(cacheKey,JSON.stringify(events));list.innerHTML=renderMatches(events)+'<div style="text-align:center;color:#4caf50;font-size:12px;margin-top:6px">✅ تم التحديث - مباريات اليوم</div>';}).catch(function(){if(!saved)list.innerHTML='<div style="background:#fff;padding:16px;border-radius:14px;text-align:center">📴 بدون إنترنت<br>شد الإنترنت مرة وحدة باش يتحفظو المباريات<br><button onclick="loadMatches('+offset+')" style="background:#0a7a5c;color:#fff;border:0;padding:8px 14px;border-radius:12px;margin-top:8px">إعادة المحاولة</button></div>';});}
+setInterval(function(){var now=new Date();var times=[[5,9,'الفجر'],[12,5,'الظهر'],[15,0,'العصر'],[17,31,'المغرب'],[18,41,'العشاء']];for(var i=0;i<times.length;i++){var h=times[i][0];var m=times[i][1];var n=times[i][2];if(now.getHours()===h&&now.getMinutes()===(m-5)&&now.getSeconds()<2){alert('💧 باقي 5 دقائق على '+n+' - توضأ الآن');}if(now.getHours()===h&&now.getMinutes()===m&&now.getSeconds()<2){if(adhanEnabled)testAdhan(n);}}},1000);
+</script>
+</body>
+</html>
